@@ -1,8 +1,12 @@
 import React from 'react';
 
+import './styles.css';
+
+import Logon from './pages/Logon';
+
 function App() {
   return (
-    <h1> Be the Hero </h1>
+    <Logon/>
   );
 }
 
