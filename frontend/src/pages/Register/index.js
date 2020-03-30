@@ -14,7 +14,7 @@ export default function Register() {
     const [city, setCity] = useState('');
     const [uf, setUf] = useState('');
 
-    const history = useHistory()
+    const history = useHistory();
 
     async function handleRegister(e) {
         e.preventDefault();
@@ -25,7 +25,7 @@ export default function Register() {
             whatsapp,
             city,
             uf
-        }
+        };
 
         try {
             const response = await api.post('ongs', data);
