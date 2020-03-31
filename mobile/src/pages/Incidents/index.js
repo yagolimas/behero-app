@@ -1,0 +1,54 @@
+import React, { useState, useEffect } from 'react';
+import { View, FlatList, Image, Text } from 'react-native';
+
+import api from "../../services/api";
+
+import logoImg from '../../assets/logo.png';
+
+import styles from './styles';
+
+export default function Incidents() {
+    const [incidents, setIncidents] = useState([]);
+    const [page, setPage] = useState(1);
+    
+    async function loadIncidents() {
+        const response = await api.get('incidents', {
+            params: { page }
+        });
+        setIncidents([...incidents, ...response.data]);
+        setPage(page + 1);
+    }
+
+    useEffect(() => {
+        loadIncidents();
+    }, []);
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.header}>
+                <Image source={logoImg}/>
+                <Text style={styles.headerText}>
+                    Total de <Text style={styles.headerTextBold}>0 casos</Text>.
+                </Text>
+            </View>
+            <Text style={styles.title}>Bem-vindo!</Text>
+            <Text style={styles.description}>Escolha um dos casos abaixo e salvo o dia.</Text>
+            <FlatList 
+                data={incidents}
+                style={styles.incidentList}
+                keyExtractor={incident => String(incident.id)}
+                renderItem={({ item: incident }) => (
+                    <View style={styles.incident}>
+                        <Text style={styles.incidentProperty}>ONG:</Text>
+                        <Text style={styles.incidentValue}>{incident.name}</Text>
+
+                        <Text style={styles.incidentProperty}>CASO:</Text>
+                        <Text style={styles.incidentValue}>{incident.title}</Text>
+
+                        <Text style={styles.incidentProperty}>VALOR:</Text>
+                        <Text style={styles.incidentValue}>{incident.value}</Text>
+                    </View>
+                )}/>
+        </View>
+    );
+}
