@@ -12,6 +12,7 @@ import styles from './styles';
 export default function Incidents() {
     const [incidents, setIncidents] = useState([]);
     const [page, setPage] = useState(1);
+    const [total, setTotal] = useState(0);
 
     const navigation = useNavigation();
 
@@ -24,6 +25,7 @@ export default function Incidents() {
             params: { page }
         });
         setIncidents([...incidents, ...response.data]);
+        setTotal(response.headers['x-total-count']);
         setPage(page + 1);
     }
 
@@ -36,7 +38,7 @@ export default function Incidents() {
             <View style={styles.header}>
                 <Image source={logoImg}/>
                 <Text style={styles.headerText}>
-                    Total de <Text style={styles.headerTextBold}>0 casos</Text>.
+                    Total de <Text style={styles.headerTextBold}> { total } casos</Text>.
                 </Text>
             </View>
             <Text style={styles.title}>Bem-vindo!</Text>
@@ -56,8 +58,11 @@ export default function Incidents() {
                     <Text style={styles.incidentValue}>{incident.title}</Text>
 
                     <Text style={styles.incidentProperty}>VALOR:</Text>
-                    <Text style={styles.incidentValue}>{
-                        Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(incident.value)}
+                    <Text style={styles.incidentValue}>
+                        { Intl.NumberFormat('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL' 
+                        }).format(incident.value) }
                     </Text>
 
                     <TouchableOpacity 
